@@ -37,7 +37,33 @@ public class SpacialOutcast extends ApplicationAdapter
 		if (spawnTimer > spawnDelay)
 		{
 			spawnTimer = 0;
-			ships.add(new Ship(new Vector2(0, Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
+			int side = Utilities.randInt(0, 3);
+			switch (side)
+			{
+				case 0:
+				{
+					ships.add(new Ship(new Vector2(0, Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
+					break;
+				}
+
+				case 1:
+				{
+					ships.add(new Ship(new Vector2(Gdx.graphics.getWidth(), Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
+					break;
+				}
+
+				case 2:
+				{
+					ships.add(new Ship(new Vector2(Utilities.randInt(0, Gdx.graphics.getHeight()), Gdx.graphics.getHeight()), 120));
+					break;
+				}
+
+				case 3:
+				{
+					ships.add(new Ship(new Vector2(Utilities.randInt(0, Gdx.graphics.getHeight()), 0), 120));
+					break;
+				}
+			}
 		}
 		else
 		{

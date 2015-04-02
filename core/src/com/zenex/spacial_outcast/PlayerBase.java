@@ -18,12 +18,12 @@ public class PlayerBase
         base.setPosition(pos.x, pos.y);
         turrets.add(new Turret(Utilities.getScreenCenter()));
 
+        ArrayList<Vector2> invalidPositions = new ArrayList<Vector2>();
+        invalidPositions.add(new Vector2(2, 2));
+
         for (int i = 0; i < 4; ++i)
         {
             Vector2 randTurretPos;
-
-            ArrayList<Vector2> invalidPositions = new ArrayList<Vector2>();
-            invalidPositions.add(new Vector2(2, 2));
             boolean validPos = false;
 
             do
@@ -33,14 +33,22 @@ public class PlayerBase
                 for (int invPosI = 0; invPosI != invalidPositions.size(); ++invPosI)
                 {
                     Vector2 invalidPos = invalidPositions.get(invPosI);
-                    if (randTurretPos != invalidPos)
+                    if (randTurretPos == invalidPos)
+                    {
+                        validPos = false;
+                        invPosI = invalidPositions.size();
+                    }
+                    else
                     {
                         validPos = true;
-                        invalidPositions.add(randTurretPos.cpy());
-                        Vector2 tPos = new Vector2(pos.x + randTurretPos.x * 16 + 8, pos.y + randTurretPos.y * 16 + 8);
-                        turrets.add(new Turret(tPos));
-                        break;
                     }
+                }
+
+                if (validPos)
+                {
+                    invalidPositions.add(randTurretPos.cpy());
+                    Vector2 tPos = new Vector2(pos.x + randTurretPos.x * 16 + 8, pos.y + randTurretPos.y * 16 + 8);
+                    turrets.add(new Turret(tPos));
                 }
             } while (!validPos);
 

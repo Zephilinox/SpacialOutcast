@@ -28,6 +28,7 @@ public class Turret
         newPos.y -= turret.getOriginY();
         turret.setPosition(newPos.x, newPos.y);
         colInfo.radius = 8;
+        turret.setColor(1.f, 1.f, 1.f, 0.5f);
     }
 
     public void update()
