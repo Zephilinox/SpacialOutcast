@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class PlayerBase
 {
@@ -22,9 +23,20 @@ public class PlayerBase
 
     public void update()
     {
-        for (Turret t : turrets)
+        Iterator<Turret> it = turrets.iterator();
+
+        while (it.hasNext())
         {
-            t.update();
+            Turret t = it.next();
+
+            if (t.alive)
+            {
+                t.update();
+            }
+            else
+            {
+                it.remove();
+            }
         }
     }
 
@@ -41,7 +53,11 @@ public class PlayerBase
     {
         for (Turret t : turrets)
         {
-            t.collisionCheck(ships);
+            for (Ship s : ships)
+            {
+                t.collisionCheck(s);
+                t.collisionCheck(s.getShots());
+            }
         }
     }
 

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 public class Ship
 {
     Sprite ship = new Sprite(new Texture("Ship.png"));
@@ -16,9 +18,14 @@ public class Ship
     int orbitSteps = (maxOrbitDistance-minOrbitDistance) / orbitStepDistance;
     int orbitDirection = 0;
     float orbitDistance;
+    boolean orbiting = false;
     CollisionInformation colInfo = new CollisionInformation();
     boolean alive = true;
     int health = 255;
+
+    ArrayList<Shot> shots = new ArrayList<Shot>();
+    float shotDelay = 300;
+    float shotTimer = 0;
 
     public Ship(final Vector2 pos, float speed)
     {
@@ -40,6 +47,11 @@ public class Ship
 
     public void update()
     {
+        for (Shot s : shots)
+        {
+            s.update();
+        }
+
         colInfo.position = Utilities.getOriginPosition(ship);
 
         Utilities.rotateToVec(ship, Utilities.getScreenCenter());
@@ -54,6 +66,10 @@ public class Ship
             //System.out.print(distToCenter + " | " + percentage + " | " + speed * percentage * Gdx.graphics.getDeltaTime() + "\n");
             Utilities.moveAlongRotation(ship, speed * percentage * Gdx.graphics.getDeltaTime());
         }
+        else
+        {
+            orbiting = true;
+        }
 
         Vector2 moveDir = Utilities.getDirectionVector(ship);
         moveDir.rotate(90);
@@ -62,11 +78,28 @@ public class Ship
         Utilities.move(ship, moveDir);
 
         ship.setColor(1.f, health / 255.f, health / 255.f, 1.f);
+
+        if (orbiting)
+        {
+            if (shotTimer > shotDelay)
+            {
+                shotTimer = 0;
+                shots.add(new Shot(Utilities.getOriginPosition(ship), ship.getRotation(), speed * 1.25f, Shot.Type.EnemyShip));
+            }
+            else
+            {
+                shotTimer += (int)(Gdx.graphics.getDeltaTime() * 1000.f);
+            }
+        }
     }
 
     public void draw(SpriteBatch batch)
     {
         ship.draw(batch);
+        for (Shot s : shots)
+        {
+            s.draw(batch);
+        }
     }
 
     public CollisionInformation getCollisionInformation()
@@ -81,5 +114,10 @@ public class Ship
         {
             alive = false;
         }
+    }
+
+    public ArrayList<Shot> getShots()
+    {
+        return shots;
     }
 }

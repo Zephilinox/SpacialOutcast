@@ -19,6 +19,8 @@ public class Turret
     int shotDelay = 300;
     int shotTimer = 0;
     CollisionInformation colInfo = new CollisionInformation();
+    float health = 255.f;
+    boolean alive = true;
 
     public Turret(final Vector2 pos)
     {
@@ -28,7 +30,6 @@ public class Turret
         newPos.y -= turret.getOriginY();
         turret.setPosition(newPos.x, newPos.y);
         colInfo.radius = 8;
-        turret.setColor(1.f, 1.f, 1.f, 0.5f);
         shotDelay = Utilities.randInt(100, 200);
         shotSpeed = Utilities.randInt(240, 480);
         spread = Utilities.randInt(0, 15);
@@ -43,10 +44,10 @@ public class Turret
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shotTimer > shotDelay)
         {
             shotTimer = 0;
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
         }
         else
         {
@@ -80,18 +81,38 @@ public class Turret
         }
     }
 
-    public void collisionCheck(final ArrayList<Ship> ships)
+    public void collisionCheck(final Ship ship)
     {
         for (Shot shot : shots)
         {
-            for (Ship ship : ships)
+            if (Utilities.isColliding(shot.getCollisionInformation(), ship.getCollisionInformation()))
             {
-                if (Utilities.isColliding(shot.getCollisionInformation(), ship.getCollisionInformation()))
-                {
-                    shot.onCollision();
-                    ship.onCollision();
-                }
+                shot.onCollision();
+                ship.onCollision();
             }
+        }
+    }
+
+    public void collisionCheck(final ArrayList<Shot> shots)
+    {
+        for (Shot shot : shots)
+        {
+            if (Utilities.isColliding(shot.getCollisionInformation(), colInfo))
+            {
+                shot.onCollision();
+                onCollision();
+            }
+        }
+    }
+
+    public void onCollision()
+    {
+        health -= 10;
+        turret.setColor(1.f, 1.f, 1.f, 0.5f + (health / 255.f / 2));
+
+        if (health <= 0)
+        {
+            alive = false;
         }
     }
 }
