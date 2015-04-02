@@ -38,29 +38,30 @@ public class SpacialOutcast extends ApplicationAdapter
 		{
 			spawnTimer = 0;
 			int side = Utilities.randInt(0, 3);
+			int offscreenOffset = 64;
 			switch (side)
 			{
 				case 0:
 				{
-					ships.add(new Ship(new Vector2(0, Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
+					ships.add(new Ship(new Vector2(-offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset)), generateShipSpeed()));
 					break;
 				}
 
 				case 1:
 				{
-					ships.add(new Ship(new Vector2(Gdx.graphics.getWidth(), Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
+					ships.add(new Ship(new Vector2(Gdx.graphics.getWidth() + offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset)), generateShipSpeed()));
 					break;
 				}
 
 				case 2:
 				{
-					ships.add(new Ship(new Vector2(Utilities.randInt(0, Gdx.graphics.getHeight()), Gdx.graphics.getHeight()), 120));
+					ships.add(new Ship(new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), Gdx.graphics.getHeight() + offscreenOffset), generateShipSpeed()));
 					break;
 				}
 
 				case 3:
 				{
-					ships.add(new Ship(new Vector2(Utilities.randInt(0, Gdx.graphics.getHeight()), 0), 120));
+					ships.add(new Ship(new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), -offscreenOffset), generateShipSpeed()));
 					break;
 				}
 			}
@@ -106,5 +107,10 @@ public class SpacialOutcast extends ApplicationAdapter
 		}
 
 		batch.end();
+	}
+
+	public int generateShipSpeed()
+	{
+		return Utilities.randInt(80, 160);
 	}
 }

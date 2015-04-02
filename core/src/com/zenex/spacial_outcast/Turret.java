@@ -15,7 +15,7 @@ public class Turret
     Sprite turret = new Sprite(new Texture("Turret.png"));
     ArrayList<Shot> shots = new ArrayList<Shot>();
     float shotSpeed = 360;
-    int spread = 3;
+    int spread = 15;
     int shotDelay = 300;
     int shotTimer = 0;
     CollisionInformation colInfo = new CollisionInformation();
@@ -40,6 +40,9 @@ public class Turret
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shotTimer > shotDelay)
         {
             shotTimer = 0;
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
             shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
         }
         else
