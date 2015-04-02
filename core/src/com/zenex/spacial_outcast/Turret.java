@@ -15,6 +15,9 @@ public class Turret
     Sprite turret;
     ArrayList<Shot> shots;
     float shotSpeed;
+    int spread;
+    int shotDelay;
+    int shotTimer;
 
     public Turret(final Vector2 pos)
     {
@@ -25,17 +28,25 @@ public class Turret
         newPos.y -= turret.getOriginY();
         turret.setPosition(newPos.x, newPos.y);
         shots = new ArrayList<Shot>();
-        shotSpeed = 20;
+        shotSpeed = 360;
+        spread = 3;
+        shotDelay = 300;
+        shotTimer = 0;
     }
 
     public void update()
     {
         Utilities.rotateToMouse(turret);
 
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shotTimer > shotDelay)
         {
+            shotTimer = 0;
             Vector2 pos = new Vector2(turret.getX() + turret.getOriginX(), turret.getY() + turret.getOriginY());
-            shots.add(new Shot(pos, turret.getRotation(), shotSpeed));
+            shots.add(new Shot(pos, turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
+        }
+        else
+        {
+            shotTimer += (int)(Gdx.graphics.getDeltaTime() * 1000.f);
         }
 
         Iterator<Shot> it = shots.iterator();

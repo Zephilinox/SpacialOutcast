@@ -73,4 +73,10 @@ public class Utilities
         Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
+
+    public static float randFloat(float min, float max)
+    {
+        Random rand = new Random();
+        return (rand.nextFloat() * (max - min)) + min;
+    }
 }

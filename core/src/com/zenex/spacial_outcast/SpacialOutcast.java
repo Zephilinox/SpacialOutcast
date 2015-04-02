@@ -16,7 +16,7 @@ public class SpacialOutcast extends ApplicationAdapter
 	{
 		batch = new SpriteBatch();
 		base = new PlayerBase();
-		ship1 = new Ship(Utilities.getScreenCenter(), 10);
+		ship1 = new Ship(Utilities.getScreenCenter(), 120);
 	}
 
 	@Override

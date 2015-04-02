@@ -1,5 +1,6 @@
 package com.zenex.spacial_outcast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,7 +24,7 @@ public class Ship
         if (Utilities.distToMouse(ship) > speed)
         {
             Utilities.rotateToMouse(ship);
-            Utilities.moveAlongRotation(ship, speed);
+            Utilities.moveAlongRotation(ship, speed * Gdx.graphics.getDeltaTime());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.zenex.spacial_outcast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +22,7 @@ public class Shot
 
     public void update()
     {
-        Utilities.moveAlongRotation(shot, speed);
+        Utilities.moveAlongRotation(shot, speed * Gdx.graphics.getDeltaTime());
     }
 
     public void draw(SpriteBatch batch)
