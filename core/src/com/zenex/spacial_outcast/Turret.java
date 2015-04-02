@@ -29,6 +29,9 @@ public class Turret
         turret.setPosition(newPos.x, newPos.y);
         colInfo.radius = 8;
         turret.setColor(1.f, 1.f, 1.f, 0.5f);
+        shotDelay = Utilities.randInt(100, 200);
+        shotSpeed = Utilities.randInt(240, 480);
+        spread = Utilities.randInt(0, 15);
     }
 
     public void update()
