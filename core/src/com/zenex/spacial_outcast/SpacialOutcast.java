@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class SpacialOutcast extends ApplicationAdapter
 {
@@ -16,7 +17,7 @@ public class SpacialOutcast extends ApplicationAdapter
 	{
 		batch = new SpriteBatch();
 		base = new PlayerBase();
-		ship1 = new Ship(Utilities.getScreenCenter(), 120);
+		ship1 = new Ship(new Vector2(0, 0), 120);
 	}
 
 	@Override

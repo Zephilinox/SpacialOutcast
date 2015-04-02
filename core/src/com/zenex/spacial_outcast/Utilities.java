@@ -17,26 +17,45 @@ public class Utilities
         return dif;
     }
 
+    public static float distToVec(Sprite sprite, Vector2 vec)
+    {
+        Vector2 spritePos = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
+        return vec.dst(spritePos);
+    }
+
     public static float distToMouse(Sprite sprite)
     {
         Vector2 mousePos = new Vector2(Gdx.input.getX(0), Gdx.graphics.getHeight() - Gdx.input.getY(0));
-        Vector2 shipPos = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
-        return mousePos.dst(shipPos);
+        return distToVec(sprite, mousePos);
+    }
+
+    public static float getAngleBetween(Vector2 a, Vector2 b)
+    {
+        Vector2 dif = vectorDifference(a, b);
+        dif.setLength(1);
+        return MathUtils.radiansToDegrees * MathUtils.atan2(dif.x, -dif.y);
+    }
+
+    public static void rotateToVec(Sprite sprite, Vector2 vec)
+    {
+        Vector2 spritePos = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
+        sprite.setRotation(getAngleBetween(spritePos, vec));
     }
 
     public static void rotateToMouse(Sprite sprite)
     {
         Vector2 mousePos = new Vector2(Gdx.input.getX(0), Gdx.graphics.getHeight() - Gdx.input.getY(0));
-        Vector2 spritePos = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
-        Vector2 dif = vectorDifference(spritePos, mousePos);
-        dif.setLength(1);
+        rotateToVec(sprite, mousePos);
+    }
 
-        sprite.setRotation(MathUtils.radiansToDegrees * MathUtils.atan2(dif.x, -dif.y));
+    public static Vector2 getDirectionVector(Sprite sprite)
+    {
+        return new Vector2(-1 * MathUtils.sinDeg(sprite.getRotation()), MathUtils.cosDeg(sprite.getRotation()));
     }
 
     public static void moveAlongRotation(Sprite sprite, float speed)
     {
-        Vector2 movement = new Vector2(-1 * MathUtils.sinDeg(sprite.getRotation()), MathUtils.cosDeg(sprite.getRotation()));
+        Vector2 movement = getDirectionVector(sprite);
         movement.scl(speed);
 
         move(sprite, movement);
