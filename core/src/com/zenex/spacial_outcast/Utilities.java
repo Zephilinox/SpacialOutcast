@@ -17,7 +17,7 @@ public class Utilities
         return dif;
     }
 
-    public static float distToVec(Sprite sprite, Vector2 vec)
+    public static float distToVec(Sprite sprite, final Vector2 vec)
     {
         Vector2 spritePos = new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
         return vec.dst(spritePos);
@@ -29,7 +29,7 @@ public class Utilities
         return distToVec(sprite, mousePos);
     }
 
-    public static float getAngleBetween(Vector2 a, Vector2 b)
+    public static float getAngleBetween(final Vector2 a, final Vector2 b)
     {
         Vector2 dif = vectorDifference(a, b);
         dif.setLength(1);
@@ -97,5 +97,20 @@ public class Utilities
     {
         Random rand = new Random();
         return (rand.nextFloat() * (max - min)) + min;
+    }
+
+    public static boolean isColliding(final CollisionInformation colInfo1, final CollisionInformation colInfo2)
+    {
+        return isColliding(colInfo1.position, colInfo1.radius, colInfo2.position, colInfo2.radius);
+    }
+
+    public static boolean isColliding(final Vector2 pos1, float radius1, final Vector2 pos2, float radius2)
+    {
+        return (pos1.dst(pos2) <= radius1 + radius2);
+    }
+
+    public static Vector2 getOriginPosition(Sprite sprite)
+    {
+        return new Vector2(sprite.getX() + sprite.getOriginX(), sprite.getY() + sprite.getOriginY());
     }
 }

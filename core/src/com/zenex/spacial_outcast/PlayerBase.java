@@ -9,15 +9,13 @@ import java.util.ArrayList;
 
 public class PlayerBase
 {
-    Sprite base;
-    ArrayList<Turret> turrets;
+    Sprite base = new Sprite(new Texture("Base.png"));
+    ArrayList<Turret> turrets = new ArrayList<Turret>();
 
     public PlayerBase()
     {
-        base = new Sprite(new Texture("Base.png"));
         Vector2 pos = Utilities.getScreenCenter(new Vector2(base.getOriginX(), base.getOriginY()));
         base.setPosition(pos.x, pos.y);
-        turrets = new ArrayList<Turret>();
         turrets.add(new Turret(Utilities.getScreenCenter()));
 
         for (int i = 0; i < 4; ++i)
@@ -63,6 +61,14 @@ public class PlayerBase
         for (Turret t : turrets)
         {
             t.draw(batch);
+        }
+    }
+
+    public void collisionCheck(final ArrayList<Ship> ships)
+    {
+        for (Turret t : turrets)
+        {
+            t.collisionCheck(ships);
         }
     }
 }

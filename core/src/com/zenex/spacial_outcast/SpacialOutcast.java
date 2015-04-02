@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class SpacialOutcast extends ApplicationAdapter
 {
@@ -22,7 +23,6 @@ public class SpacialOutcast extends ApplicationAdapter
 		batch = new SpriteBatch();
 		base = new PlayerBase();
 		ships = new ArrayList<Ship>();
-		ships.add(new Ship(new Vector2(0, Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
 	}
 
 	@Override
@@ -46,10 +46,23 @@ public class SpacialOutcast extends ApplicationAdapter
 
 		base.update();
 
-		for (Ship s : ships)
+		Iterator<Ship> it = ships.iterator();
+
+		while (it.hasNext())
 		{
-			s.update();
+			Ship s = it.next();
+
+			if (s.alive)
+			{
+				s.update();
+			}
+			else
+			{
+				it.remove();
+			}
 		}
+
+		base.collisionCheck(ships);
 	}
 
 	public void draw()

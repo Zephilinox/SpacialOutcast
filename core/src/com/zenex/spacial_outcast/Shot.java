@@ -8,20 +8,30 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Shot
 {
-    Sprite shot;
+    public boolean alive = true;
+
+    Sprite shot = new Sprite(new Texture("Shot.png"));
     float speed;
+    CollisionInformation colInfo = new CollisionInformation();
 
     public Shot(final Vector2 pos, float rotation, float speed)
     {
-        shot = new Sprite(new Texture("Shot.png"));
         shot.setOriginCenter();
         shot.setPosition(pos.x - shot.getOriginX(), pos.y - shot.getOriginY());
         shot.setRotation(rotation);
         this.speed = speed;
+        colInfo.radius = 1;
     }
 
     public void update()
     {
+        colInfo.position = Utilities.getOriginPosition(shot);
+
+        if (!Utilities.inWindow(shot))
+        {
+            alive = false;
+        }
+
         Utilities.moveAlongRotation(shot, speed * Gdx.graphics.getDeltaTime());
     }
 
@@ -30,8 +40,13 @@ public class Shot
         shot.draw(batch);
     }
 
-    public boolean isAlive()
+    public CollisionInformation getCollisionInformation()
     {
-        return Utilities.inWindow(shot);
+        return colInfo;
+    }
+
+    public void onCollision()
+    {
+        alive = false;
     }
 }

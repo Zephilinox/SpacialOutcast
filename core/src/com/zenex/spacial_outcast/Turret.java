@@ -12,37 +12,34 @@ import java.util.Iterator;
 
 public class Turret
 {
-    Sprite turret;
-    ArrayList<Shot> shots;
-    float shotSpeed;
-    int spread;
-    int shotDelay;
-    int shotTimer;
+    Sprite turret = new Sprite(new Texture("Turret.png"));
+    ArrayList<Shot> shots = new ArrayList<Shot>();
+    float shotSpeed = 360;
+    int spread = 3;
+    int shotDelay = 300;
+    int shotTimer = 0;
+    CollisionInformation colInfo = new CollisionInformation();
 
     public Turret(final Vector2 pos)
     {
         Vector2 newPos = pos.cpy();
-        turret = new Sprite(new Texture("Turret.png"));
         turret.setOrigin(8, 8);
         newPos.x -= turret.getOriginX();
         newPos.y -= turret.getOriginY();
         turret.setPosition(newPos.x, newPos.y);
-        shots = new ArrayList<Shot>();
-        shotSpeed = 360;
-        spread = 3;
-        shotDelay = 300;
-        shotTimer = 0;
+        colInfo.radius = 8;
     }
 
     public void update()
     {
+        colInfo.position = Utilities.getOriginPosition(turret);
+
         Utilities.rotateToMouse(turret);
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shotTimer > shotDelay)
         {
             shotTimer = 0;
-            Vector2 pos = new Vector2(turret.getX() + turret.getOriginX(), turret.getY() + turret.getOriginY());
-            shots.add(new Shot(pos, turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
+            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed));
         }
         else
         {
@@ -55,7 +52,7 @@ public class Turret
         {
             Shot s = it.next();
 
-            if (s.isAlive())
+            if (s.alive)
             {
                 s.update();
             }
@@ -73,6 +70,21 @@ public class Turret
         for (Shot s : shots)
         {
             s.draw(batch);
+        }
+    }
+
+    public void collisionCheck(final ArrayList<Ship> ships)
+    {
+        for (Shot shot : shots)
+        {
+            for (Ship ship : ships)
+            {
+                if (Utilities.isColliding(shot.getCollisionInformation(), ship.getCollisionInformation()))
+                {
+                    shot.onCollision();
+                    ship.onCollision();
+                }
+            }
         }
     }
 }
