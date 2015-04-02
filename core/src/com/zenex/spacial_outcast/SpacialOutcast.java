@@ -6,18 +6,23 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
+import java.util.ArrayList;
+
 public class SpacialOutcast extends ApplicationAdapter
 {
 	SpriteBatch batch;
 	PlayerBase base;
-	Ship ship1;
+	ArrayList<Ship> ships;
+	int spawnDelay = 1000;
+	int spawnTimer = 0;
 
 	@Override
 	public void create ()
 	{
 		batch = new SpriteBatch();
 		base = new PlayerBase();
-		ship1 = new Ship(new Vector2(0, 0), 120);
+		ships = new ArrayList<Ship>();
+		ships.add(new Ship(new Vector2(0, Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
 	}
 
 	@Override
@@ -29,8 +34,22 @@ public class SpacialOutcast extends ApplicationAdapter
 
 	public void update()
 	{
+		if (spawnTimer > spawnDelay)
+		{
+			spawnTimer = 0;
+			ships.add(new Ship(new Vector2(0, Utilities.randInt(0, Gdx.graphics.getHeight())), 120));
+		}
+		else
+		{
+			spawnTimer += (int)(Gdx.graphics.getDeltaTime() * 1000.f);
+		}
+
 		base.update();
-		ship1.update();
+
+		for (Ship s : ships)
+		{
+			s.update();
+		}
 	}
 
 	public void draw()
@@ -41,7 +60,11 @@ public class SpacialOutcast extends ApplicationAdapter
 		batch.begin();
 
 		base.draw(batch);
-		ship1.draw(batch);
+
+		for (Ship s : ships)
+		{
+			s.draw(batch);
+		}
 
 		batch.end();
 	}
