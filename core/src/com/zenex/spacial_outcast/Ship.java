@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Ship
 {
@@ -35,7 +36,7 @@ public class Ship
         orbitDistance = minOrbitDistance + (Utilities.randInt(0, orbitSteps) * orbitStepDistance);
         colInfo.radius = ship.getWidth()/2.f;
 
-        if (pos.y > Gdx.graphics.getHeight()/2.f)
+        if (Utilities.randInt(0, 1) == 0)
         {
             orbitDirection = -1;
         }
@@ -47,9 +48,20 @@ public class Ship
 
     public void update()
     {
-        for (Shot s : shots)
+        Iterator<Shot> it = shots.iterator();
+
+        while (it.hasNext())
         {
-            s.update();
+            Shot s = it.next();
+
+            if (s.alive)
+            {
+                s.update();
+            }
+            else
+            {
+                it.remove();
+            }
         }
 
         colInfo.position = Utilities.getOriginPosition(ship);

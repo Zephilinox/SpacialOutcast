@@ -69,6 +69,7 @@ public class SpacialOutcast extends ApplicationAdapter
 		else
 		{
 			spawnTimer += (int)(Gdx.graphics.getDeltaTime() * 1000.f);
+			spawnDelay--;
 		}
 
 		base.update();

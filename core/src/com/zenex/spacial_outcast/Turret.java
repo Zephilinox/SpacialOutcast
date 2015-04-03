@@ -107,7 +107,7 @@ public class Turret
 
     public void onCollision()
     {
-        health -= 10;
+        health -= 5;
         turret.setColor(1.f, 1.f, 1.f, 0.5f + (health / 255.f / 2));
 
         if (health <= 0)
