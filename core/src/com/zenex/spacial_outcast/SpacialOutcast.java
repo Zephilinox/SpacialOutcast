@@ -3,6 +3,7 @@ package com.zenex.spacial_outcast;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
@@ -16,10 +17,15 @@ public class SpacialOutcast extends ApplicationAdapter
 	ArrayList<Ship> ships;
 	int spawnDelay = 1000;
 	int spawnTimer = 0;
+	OrthographicCamera camera;
 
 	@Override
 	public void create ()
 	{
+		camera = new OrthographicCamera(800, 480);
+		camera.translate(Utilities.getScreenCenter());
+		camera.zoom = 1;
+		camera.update();
 		batch = new SpriteBatch();
 		base = new PlayerBase();
 		ships = new ArrayList<Ship>();
@@ -38,32 +44,37 @@ public class SpacialOutcast extends ApplicationAdapter
 		{
 			spawnTimer = 0;
 			int side = Utilities.randInt(0, 3);
-			int offscreenOffset = 64;
+			int offscreenOffset = 8;
 			Vector2 pos = null;
+
+			float xMax = Gdx.graphics.getWidth() + offscreenOffset;
+			float xMin = -offscreenOffset;
+			float yMax = Gdx.graphics.getHeight() + offscreenOffset;
+			float yMin = -offscreenOffset;
 
 			switch (side)
 			{
 				case 0:
 				{
-					pos = new Vector2(-offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset));
+					pos = new Vector2(xMin, Utilities.randFloat(yMin, yMax));
 					break;
 				}
 
 				case 1:
 				{
-					pos = new Vector2(Gdx.graphics.getWidth() + offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset));
+					pos = new Vector2(xMax, Utilities.randFloat(yMin, yMax));
 					break;
 				}
 
 				case 2:
 				{
-					pos = new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), Gdx.graphics.getHeight() + offscreenOffset);
+					pos = new Vector2(Utilities.randFloat(xMin, xMax), yMax);
 					break;
 				}
 
 				case 3:
 				{
-					pos = new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), -offscreenOffset);
+					pos = new Vector2(Utilities.randFloat(xMin, xMax), yMin);
 					break;
 				}
 			}
@@ -105,6 +116,7 @@ public class SpacialOutcast extends ApplicationAdapter
 		Gdx.gl.glClearColor(40.f / 255.f, 40.f / 255.f, 40.f / 255.f, 255.f / 255.f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
 		base.draw(batch);

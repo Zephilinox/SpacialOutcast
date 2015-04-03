@@ -14,7 +14,7 @@ public class Turret
 {
     public boolean alive = true;
 
-    private Sprite turret = new Sprite(new Texture("Turret.png"));
+    private Sprite turret;
     private float health = 255.f;
 
     private ArrayList<Shot> shots = new ArrayList<Shot>();
@@ -28,6 +28,9 @@ public class Turret
 
     public Turret(final Vector2 pos)
     {
+        Texture turretTex = new Texture("Turret.png");
+        turretTex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        turret= new Sprite(turretTex);
         Vector2 newPos = pos.cpy();
         turret.setOrigin(8, 8);
         newPos.x -= turret.getOriginX();
@@ -37,7 +40,7 @@ public class Turret
         shotDelay = Utilities.randInt(100, 200);
         shotSpeed = Utilities.randInt(400, 600);
         shotCount = Utilities.randInt(1, 6);
-        spread = shotCount * 1;
+        spread = shotCount;
     }
 
     public void update()
