@@ -18,7 +18,7 @@ public class Shot
 
     public boolean alive = true;
 
-    private Sprite shot = new Sprite(new Texture("Shot.png"));
+    private Sprite shot;
     private float speed;
     private Type type = Type.Default;
 
@@ -26,6 +26,8 @@ public class Shot
 
     public Shot(final Vector2 pos, float rotation, float speed, Type type)
     {
+        Texture shotTexture = new Texture("Shot.png");
+        shot = new Sprite(shotTexture);
         shot.setOriginCenter();
         shot.setPosition(pos.x - shot.getOriginX(), pos.y - shot.getOriginY());
         shot.setRotation(rotation);

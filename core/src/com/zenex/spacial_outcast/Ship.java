@@ -5,15 +5,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Ship
 {
     public boolean alive = true;
 
-    private Sprite ship = new Sprite(new Texture("Ship.png"));
+    private Sprite ship;
     private float speed;
     private float health = 255.f;
 
@@ -27,7 +27,7 @@ public class Ship
 
     private CollisionInformation colInfo = new CollisionInformation();
 
-    private ArrayList<Shot> shots = new ArrayList<Shot>();
+    private Array<Shot> shots = new Array<Shot>();
     private float shotDelay = 300;
     private float shotTimer = 0;
 
@@ -35,6 +35,10 @@ public class Ship
 
     public Ship(final Vector2 pos, float speed, final PlayerBase base)
     {
+        Texture shipTexture = new Texture("Ship.png");
+        shipTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ship = new Sprite(shipTexture);
+
         this.base = base;
         ship.setOriginCenter();
         ship.setPosition(pos.x - ship.getOriginX(), pos.y - ship.getOriginY());
@@ -146,7 +150,7 @@ public class Ship
         }
     }
 
-    public ArrayList<Shot> getShots()
+    public Array<Shot> getShots()
     {
         return shots;
     }

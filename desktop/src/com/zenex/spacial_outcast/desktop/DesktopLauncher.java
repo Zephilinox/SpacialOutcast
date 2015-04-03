@@ -8,8 +8,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "OuterSpacial";
-		config.width = 1600;
-		config.height = 960;
+		config.width = 800;
+		config.height = 460;
 		new LwjglApplication(new SpacialOutcast(), config);
 	}
 }

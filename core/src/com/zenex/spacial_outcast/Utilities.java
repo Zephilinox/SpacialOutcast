@@ -10,6 +10,8 @@ import java.util.Random;
 
 public class Utilities
 {
+    static Random rand = new Random(System.currentTimeMillis());
+
     public static Vector2 vectorDifference(final Vector2 a, final Vector2 b)
     {
         Vector2 dif = a.cpy();
@@ -89,13 +91,11 @@ public class Utilities
 
     public static int randInt(int min, int max)
     {
-        Random rand = new Random();
         return rand.nextInt((max - min) + 1) + min;
     }
 
     public static float randFloat(float min, float max)
     {
-        Random rand = new Random();
         return (rand.nextFloat() * (max - min)) + min;
     }
 

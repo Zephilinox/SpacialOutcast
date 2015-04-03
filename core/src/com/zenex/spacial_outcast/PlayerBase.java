@@ -4,17 +4,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class PlayerBase
 {
-    private Sprite base = new Sprite(new Texture("Base.png"));
-    private ArrayList<Turret> turrets = new ArrayList<Turret>();
+    private Sprite base;
+    private Array<Turret> turrets = new Array<Turret>();
 
     public PlayerBase()
     {
+        Texture baseTexture = new Texture("Base.png");
+        baseTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        base = new Sprite(baseTexture);
         Vector2 pos = Utilities.getScreenCenter(new Vector2(base.getOriginX(), base.getOriginY()));
         base.setPosition(pos.x, pos.y);
 
@@ -49,7 +52,7 @@ public class PlayerBase
         }
     }
 
-    public void collisionCheck(final ArrayList<Ship> ships)
+    public void collisionCheck(final Array<Ship> ships)
     {
         for (Turret t : turrets)
         {
@@ -63,11 +66,11 @@ public class PlayerBase
 
     private void generateTurrets(final Vector2 pos)
     {
-        ArrayList<Vector2> invalidPositions = new ArrayList<Vector2>();
+        Array<Vector2> invalidPositions = new Array<Vector2>();
         turrets.add(new Turret(Utilities.getScreenCenter()));
         invalidPositions.add(new Vector2(2, 2));
 
-        while (turrets.size() < 5)
+        while (turrets.size < 5)
         {
             Vector2 randPos = new Vector2(Utilities.randInt(0, 4), Utilities.randInt(0, 4));
             boolean randPosValid = true;
@@ -90,11 +93,11 @@ public class PlayerBase
 
     public int getTurretCount()
     {
-        return turrets.size();
+        return turrets.size;
     }
 
     public Vector2 getRandomTurretPosition()
     {
-        return turrets.get(Utilities.randInt(0, turrets.size() - 1)).getOriginPosition();
+        return turrets.get(Utilities.randInt(0, turrets.size - 1)).getOriginPosition();
     }
 }

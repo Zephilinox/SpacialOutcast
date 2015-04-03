@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Turret
@@ -17,7 +17,7 @@ public class Turret
     private Sprite turret;
     private float health = 255.f;
 
-    private ArrayList<Shot> shots = new ArrayList<Shot>();
+    private Array<Shot> shots = new Array<Shot>();
     private float shotSpeed = 360;
     private int spread = 15;
     private int shotDelay = 300;
@@ -37,9 +37,9 @@ public class Turret
         newPos.y -= turret.getOriginY();
         turret.setPosition(newPos.x, newPos.y);
         colInfo.radius = 8;
-        shotDelay = Utilities.randInt(100, 200);
-        shotSpeed = Utilities.randInt(400, 600);
-        shotCount = Utilities.randInt(1, 6);
+        shotDelay = Utilities.randInt(150, 300);
+        shotSpeed = Utilities.randInt(200, 400);
+        shotCount = Utilities.randInt(1, 4);
         spread = shotCount;
     }
 
@@ -105,7 +105,7 @@ public class Turret
         }
     }
 
-    public void collisionCheck(final ArrayList<Shot> shots)
+    public void collisionCheck(final Array<Shot> shots)
     {
         for (Shot shot : shots)
         {

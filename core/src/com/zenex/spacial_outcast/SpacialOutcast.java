@@ -6,15 +6,15 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 public class SpacialOutcast extends ApplicationAdapter
 {
 	SpriteBatch batch;
 	PlayerBase base;
-	ArrayList<Ship> ships;
+	Array<Ship> ships;
 	int spawnDelay = 1000;
 	int spawnTimer = 0;
 	OrthographicCamera camera;
@@ -24,11 +24,10 @@ public class SpacialOutcast extends ApplicationAdapter
 	{
 		camera = new OrthographicCamera(800, 480);
 		camera.translate(Utilities.getScreenCenter());
-		camera.zoom = 1;
 		camera.update();
 		batch = new SpriteBatch();
 		base = new PlayerBase();
-		ships = new ArrayList<Ship>();
+		ships = new Array<Ship>();
 	}
 
 	@Override
@@ -36,6 +35,7 @@ public class SpacialOutcast extends ApplicationAdapter
 	{
 		update();
 		draw();
+		System.out.println("FPS: " + 1.f / Gdx.graphics.getDeltaTime());
 	}
 
 	public void update()
@@ -44,13 +44,22 @@ public class SpacialOutcast extends ApplicationAdapter
 		{
 			spawnTimer = 0;
 			int side = Utilities.randInt(0, 3);
-			int offscreenOffset = 8;
+			int offscreenOffset = -8;
 			Vector2 pos = null;
 
 			float xMax = Gdx.graphics.getWidth() + offscreenOffset;
 			float xMin = -offscreenOffset;
 			float yMax = Gdx.graphics.getHeight() + offscreenOffset;
 			float yMin = -offscreenOffset;
+
+			float widthDifference = (Gdx.graphics.getWidth() - camera.viewportWidth);
+			float heightDifference = (Gdx.graphics.getHeight() - camera.viewportHeight);
+			float xDifference = widthDifference * -0.5f;
+			float yDifference = heightDifference * -0.5f;
+			xMax += xDifference;
+			xMin -= xDifference;
+			yMax += yDifference;
+			yMin -= yDifference;
 
 			switch (side)
 			{
