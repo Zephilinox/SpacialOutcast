@@ -39,37 +39,44 @@ public class SpacialOutcast extends ApplicationAdapter
 			spawnTimer = 0;
 			int side = Utilities.randInt(0, 3);
 			int offscreenOffset = 64;
+			Vector2 pos = null;
+
 			switch (side)
 			{
 				case 0:
 				{
-					ships.add(new Ship(new Vector2(-offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset)), generateShipSpeed()));
+					pos = new Vector2(-offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset));
 					break;
 				}
 
 				case 1:
 				{
-					ships.add(new Ship(new Vector2(Gdx.graphics.getWidth() + offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset)), generateShipSpeed()));
+					pos = new Vector2(Gdx.graphics.getWidth() + offscreenOffset, Utilities.randInt(-offscreenOffset, Gdx.graphics.getHeight() + offscreenOffset));
 					break;
 				}
 
 				case 2:
 				{
-					ships.add(new Ship(new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), Gdx.graphics.getHeight() + offscreenOffset), generateShipSpeed()));
+					pos = new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), Gdx.graphics.getHeight() + offscreenOffset);
 					break;
 				}
 
 				case 3:
 				{
-					ships.add(new Ship(new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), -offscreenOffset), generateShipSpeed()));
+					pos = new Vector2(Utilities.randInt(-offscreenOffset, Gdx.graphics.getWidth() + offscreenOffset), -offscreenOffset);
 					break;
 				}
 			}
+
+			ships.add(generateShip(pos));
 		}
 		else
 		{
 			spawnTimer += (int)(Gdx.graphics.getDeltaTime() * 1000.f);
-			spawnDelay--;
+			if (Utilities.randInt(0, 4) == 0)
+			{
+				spawnDelay--;
+			}
 		}
 
 		base.update();
@@ -110,8 +117,9 @@ public class SpacialOutcast extends ApplicationAdapter
 		batch.end();
 	}
 
-	public int generateShipSpeed()
+	public Ship generateShip(Vector2 pos)
 	{
-		return Utilities.randInt(80, 160);
+		float randSpeed = Utilities.randFloat(40, 80);
+		return new Ship(pos, randSpeed, base);
 	}
 }

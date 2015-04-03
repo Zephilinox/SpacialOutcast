@@ -11,25 +11,31 @@ import java.util.Iterator;
 
 public class Ship
 {
-    Sprite ship = new Sprite(new Texture("Ship.png"));
-    float speed;
-    int minOrbitDistance = 80;
-    int maxOrbitDistance = 160;
-    int orbitStepDistance = 10;
-    int orbitSteps = (maxOrbitDistance-minOrbitDistance) / orbitStepDistance;
-    int orbitDirection = 0;
-    float orbitDistance;
-    boolean orbiting = false;
-    CollisionInformation colInfo = new CollisionInformation();
-    boolean alive = true;
-    int health = 255;
+    public boolean alive = true;
 
-    ArrayList<Shot> shots = new ArrayList<Shot>();
-    float shotDelay = 300;
-    float shotTimer = 0;
+    private Sprite ship = new Sprite(new Texture("Ship.png"));
+    private float speed;
+    private float health = 255.f;
 
-    public Ship(final Vector2 pos, float speed)
+    private int minOrbitDistance = 80;
+    private int maxOrbitDistance = 160;
+    private int orbitStepDistance = 10;
+    private int orbitSteps = (maxOrbitDistance-minOrbitDistance) / orbitStepDistance;
+    private int orbitDirection = 0;
+    private float orbitDistance;
+    private boolean orbiting = false;
+
+    private CollisionInformation colInfo = new CollisionInformation();
+
+    private ArrayList<Shot> shots = new ArrayList<Shot>();
+    private float shotDelay = 300;
+    private float shotTimer = 0;
+
+    PlayerBase base;
+
+    public Ship(final Vector2 pos, float speed, final PlayerBase base)
     {
+        this.base = base;
         ship.setOriginCenter();
         ship.setPosition(pos.x - ship.getOriginX(), pos.y - ship.getOriginY());
         this.speed = speed;
@@ -89,14 +95,26 @@ public class Ship
         moveDir.scl(orbitDirection * speed * Gdx.graphics.getDeltaTime());
         Utilities.move(ship, moveDir);
 
-        ship.setColor(1.f, health / 255.f, health / 255.f, 1.f);
+        float healthAsColour = Math.max(health / 255.f, 0.2f) - 0.2f;
+        ship.setColor(1.f, 0.2f + healthAsColour, 0.2f + healthAsColour, 1.f);
 
         if (orbiting)
         {
             if (shotTimer > shotDelay)
             {
                 shotTimer = 0;
-                shots.add(new Shot(Utilities.getOriginPosition(ship), ship.getRotation(), speed * 1.25f, Shot.Type.EnemyShip));
+
+                float shotRot;
+                if (base.getTurretCount() > 0)
+                {
+                    shotRot = Utilities.getAngleBetween(Utilities.getOriginPosition(ship), base.getRandomTurretPosition());
+
+                    Vector2 shotPos = Utilities.getDirectionVector(ship);
+                    shotPos.scl(ship.getHeight() / 2.f);
+                    shotPos.add(Utilities.getOriginPosition(ship));
+
+                    shots.add(new Shot(shotPos, shotRot, speed * 1.25f, Shot.Type.EnemyShip));
+                }
             }
             else
             {
@@ -121,7 +139,7 @@ public class Ship
 
     public void onCollision()
     {
-        health -= 40;
+        health -= 20;
         if (health <= 0)
         {
             alive = false;

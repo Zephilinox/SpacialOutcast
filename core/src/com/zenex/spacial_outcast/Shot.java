@@ -18,10 +18,11 @@ public class Shot
 
     public boolean alive = true;
 
-    Sprite shot = new Sprite(new Texture("Shot.png"));
-    float speed;
-    CollisionInformation colInfo = new CollisionInformation();
-    Type type = Type.Default;
+    private Sprite shot = new Sprite(new Texture("Shot.png"));
+    private float speed;
+    private Type type = Type.Default;
+
+    private CollisionInformation colInfo = new CollisionInformation();
 
     public Shot(final Vector2 pos, float rotation, float speed, Type type)
     {

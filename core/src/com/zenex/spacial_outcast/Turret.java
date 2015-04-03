@@ -12,15 +12,19 @@ import java.util.Iterator;
 
 public class Turret
 {
-    Sprite turret = new Sprite(new Texture("Turret.png"));
-    ArrayList<Shot> shots = new ArrayList<Shot>();
-    float shotSpeed = 360;
-    int spread = 15;
-    int shotDelay = 300;
-    int shotTimer = 0;
-    CollisionInformation colInfo = new CollisionInformation();
-    float health = 255.f;
-    boolean alive = true;
+    public boolean alive = true;
+
+    private Sprite turret = new Sprite(new Texture("Turret.png"));
+    private float health = 255.f;
+
+    private ArrayList<Shot> shots = new ArrayList<Shot>();
+    private float shotSpeed = 360;
+    private int spread = 15;
+    private int shotDelay = 300;
+    private int shotTimer = 0;
+    private int shotCount = 1;
+
+    private CollisionInformation colInfo = new CollisionInformation();
 
     public Turret(final Vector2 pos)
     {
@@ -31,8 +35,9 @@ public class Turret
         turret.setPosition(newPos.x, newPos.y);
         colInfo.radius = 8;
         shotDelay = Utilities.randInt(100, 200);
-        shotSpeed = Utilities.randInt(240, 480);
-        spread = Utilities.randInt(0, 15);
+        shotSpeed = Utilities.randInt(400, 600);
+        shotCount = Utilities.randInt(1, 6);
+        spread = shotCount * 1;
     }
 
     public void update()
@@ -44,10 +49,14 @@ public class Turret
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && shotTimer > shotDelay)
         {
             shotTimer = 0;
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
-            shots.add(new Shot(Utilities.getOriginPosition(turret), turret.getRotation() + (Utilities.randInt(-spread, spread)), shotSpeed, Shot.Type.AllyTurret));
+            for (int i = 0; i < shotCount; ++i)
+            {
+                Vector2 shotPos = Utilities.getDirectionVector(turret);
+                shotPos.scl(turret.getHeight() / 2.f);
+                shotPos.add(Utilities.getOriginPosition(turret));
+                float shotRot = turret.getRotation() + (Utilities.randInt(-spread, spread));
+                shots.add(new Shot(shotPos, shotRot, shotSpeed, Shot.Type.AllyTurret));
+            }
         }
         else
         {
@@ -108,11 +117,17 @@ public class Turret
     public void onCollision()
     {
         health -= 5;
-        turret.setColor(1.f, 1.f, 1.f, 0.5f + (health / 255.f / 2));
+        float healthAsColour = Math.max(health / 255.f, 0.2f) - 0.2f;
+        turret.setColor(0.2f + healthAsColour, 0.2f + healthAsColour, 0.2f + healthAsColour, 1.f);
 
         if (health <= 0)
         {
             alive = false;
         }
+    }
+
+    public Vector2 getOriginPosition()
+    {
+        return Utilities.getOriginPosition(turret);
     }
 }

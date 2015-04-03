@@ -10,8 +10,8 @@ import java.util.Iterator;
 
 public class PlayerBase
 {
-    Sprite base = new Sprite(new Texture("Base.png"));
-    ArrayList<Turret> turrets = new ArrayList<Turret>();
+    private Sprite base = new Sprite(new Texture("Base.png"));
+    private ArrayList<Turret> turrets = new ArrayList<Turret>();
 
     public PlayerBase()
     {
@@ -83,9 +83,18 @@ public class PlayerBase
             if (randPosValid)
             {
                 invalidPositions.add(randPos);
-                System.out.println(randPos.x + ", " + randPos.y);
                 turrets.add(new Turret(new Vector2(pos.x + (randPos.x * 16) + 8, pos.y + (randPos.y * 16) + 8)));
             }
         }
+    }
+
+    public int getTurretCount()
+    {
+        return turrets.size();
+    }
+
+    public Vector2 getRandomTurretPosition()
+    {
+        return turrets.get(Utilities.randInt(0, turrets.size() - 1)).getOriginPosition();
     }
 }
